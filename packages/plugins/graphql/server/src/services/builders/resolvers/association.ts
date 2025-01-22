@@ -58,9 +58,11 @@ export default ({ strapi }: Context) => {
           }
         );
 
+        const dbQuery = strapi.get('query-params').transform(targetUID, sanitizedQuery);
+
         const data = await strapi.db
           ?.query(contentTypeUID)
-          .load(parent, attributeName, sanitizedQuery);
+          .load(parent, attributeName, { [attributeName]: dbQuery });
 
         const info = {
           args: sanitizedQuery,

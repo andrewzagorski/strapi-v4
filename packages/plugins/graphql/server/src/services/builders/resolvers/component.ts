@@ -30,7 +30,11 @@ export default ({ strapi }: Context) => ({
         auth: ctx?.state?.auth,
       });
 
-      return strapi.db?.query(contentTypeUID).load(parent, attributeName, sanitizedQuery);
+      const dbQuery = strapi.get('query-params').transform(component.uid, sanitizedQuery);
+
+      return strapi.db
+        ?.query(contentTypeUID)
+        .load(parent, attributeName, { [attributeName]: dbQuery });
     };
   },
 });
