@@ -1510,7 +1510,7 @@ export const createEntityManager = (db: Database): EntityManager => {
         where: { id: entity.id },
         populate: fieldsArr.reduce(
           (acc, field) => {
-            acc[field] = populate[field] ?? true;
+            acc[field] = populate?.[field] ?? true;
             return acc;
           },
           {} as Record<string, unknown>
