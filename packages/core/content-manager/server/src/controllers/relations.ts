@@ -473,11 +473,13 @@ export default {
      * The response contains the union of the two queries.
      */
     const res = await loadRelations({ id: entryId }, targetField, {
-      select: ['id', 'documentId', 'locale', 'publishedAt', 'updatedAt'],
-      ordering: 'desc',
-      page: ctx.request.query.page,
-      pageSize: ctx.request.query.pageSize,
-      filters,
+      [targetField]: {
+        select: ['id', 'documentId', 'locale', 'publishedAt', 'updatedAt'],
+        ordering: 'desc',
+        page: ctx.request.query.page,
+        pageSize: ctx.request.query.pageSize,
+        filters,
+      },
     });
 
     /**
@@ -494,8 +496,10 @@ export default {
      * Pagination is not necessary as the permissionQuery contains the ids to load.
      */
     const sanitizedRes = await loadRelations({ id: entryId }, targetField, {
-      ...strapi.get('query-params').transform(targetUid, permissionQuery),
-      ordering: 'desc',
+      [targetField]: {
+        ...strapi.get('query-params').transform(targetUid, permissionQuery),
+        ordering: 'desc',
+      },
     });
 
     // NOTE: the order is very import to make sure sanitized relations are kept in priority
